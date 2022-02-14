@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件操作</title>
+    <link rel="stylesheet" href="css/webuploader.css" type="text/css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet"/>
+    <script type="text/javascript" src="js/webuploader.min.js"></script>
+</head>
+<body>
+    <div class="left-box"></div>
+    <div class="body">
+        <div id="uploader" class="wu-example">
+            <span>下载文件测试</span>
+            <div class="btns">
+                <div id="picker" class="">选择文件</div>
+                <button id="ctlBtn" class="btn btn-default">开始上传</button>
+                <button id="stopBtn" class="btn btn-default webuploader-pick"
+                        status="suspend">暂停上传</button>
+            </div>
+            <div id="thelist" class="uploader-list"></div>
+        </div>
+    </div>
+    <div class="right-box"></div>
+</body>
+<script type="text/javascript">
+    $(function (){
+        var isEmpty=true;
+        WebUploader.Uploader.register({
+            'before-send-file':'beforeSendFile',
+            'before-send':'beforeSend',
+        },{
+            beforeSendFile:function (file) {
+                var  deferred=WebUploader.Deferred();
+                uploader.md5File(file).progress(function (percentage) {
+                    $('#' + file.id).find('p.state').text('读取文件：' + parseInt(percentage * 100) + "%");
+                }).then(function (val) {
+                    file.wholeMd5=val;
+                    $.ajax({
+                        url:"http://localhost:8080/file/checkUploadFile",
+                        type:"post",
+                        data:{"fmd5":file.wholeMd5},
+                        dataType:"json",
+                        success:function (data){
+                            if (data.bizCode==110){
+                                deferred.resolve();
+                            }else {
+                                $('#'+file.id).find('p.state').text('上传完成！');
+                                isEmpty=false;
+                                deferred.reject();
+                            }
+                        }
+                    });
+
+                });
+                return deferred.promise();
+            }
+        });
+        var uploader=WebUploader.create({
+            auto:true,
+            swf:'js/Uploader.swf',
+            server:'http://localhost:8080/file/upload',
+            chunked:true,
+            chunkSize: 2 * 1024 * 1024,
+            chunkRetry: 3,//网络问题上传失败后重试次数
+            threads: 3, //上传并发数
+            //fileNumLimit :1,
+            fileSizeLimit: 2*1024 * 1024 * 1024,//最大2GB
+            fileSingleSizeLimit: 2*1024  * 1024 * 1024,
+            method:"post",
+            pick:"#picker",
+            resize:false,
+        });
+        uploader.on('fileQueued',function (file){
+            var $li=$('<div id="'+file.id+'" class="item">' +
+                    '<h4 class="info">'+file.name+'</h4>'+
+                    '<p class="state">等待上传...</p>' +
+                    '</div>');
+            $("#thelist").append($li);
+        });
+        uploader.on('uploadProgress',function (file,percentage) {
+            var $li=$('#'+file.id),
+            $percent=$li.find('.progress .progress-bar');
+            if(!$percent.length){
+                $percent=$('<div class="progress progress-striped active">' +
+                        '<div class="progress-bar" role="progressbar" style="width: 0%"></div>'+
+                    '</div>').appendTo($li).find('.progress-bar');
+            }
+            $li.find('p.state').text('上传中..');
+            $percent.css('width',percentage*100+'%');
+        });
+        uploader.on('uploadSuccess',function (file) {
+            $('#'+file.id).find('p.state').text('上传完成！');
+            $.ajax({
+                url:"http://localhost:8080/file/checkIsFile",
+                type:"post",
+                data:{"fmd5":file.wholeMd5},
+                dataType:"json",
+                success:function (data){
+                    alert("test");
+                }
+            });
+        });
+        uploader.on('uploadBeforeSend',function (block,data) {
+            var file=block.file;
+            var fmd5=file.wholeMd5;
+            data.fmd5=fmd5;
+            data.chunkSize=block.end-block.start;
+        });
+        uploader.on('uploadError',function (file) {
+            if(isEmpty){
+                $('#'+file.id).find('p.state').text('上传失败');
+            }
+        });
+        uploader.on('uploadComplete',function (file) {
+           $('#'+file.id).find('.progress').fadeOut();
+        });
+        $('#ctlBtn').click(function () {
+            uploader.upload();//上传
+        });
+        //停止上传
+        $('#stopBtn').click(function () {
+            uploader.stop(true);
+        });
+
+    });
+</script>
+</html>

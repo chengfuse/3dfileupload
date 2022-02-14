@@ -1,0 +1,11 @@
+.body{
+    color: slategrey;
+    margin:auto;
+    margin-top: 20px;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 945px;
+    height: 1000px;
+}
+

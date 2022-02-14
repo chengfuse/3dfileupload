@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ModelAttachInfoMapper">
+  <resultMap id="BaseResultMap" type="com.example.pojo.ModelAttachInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="model_url" jdbcType="VARCHAR" property="modelUrl" />
+    <result column="model_type" jdbcType="INTEGER" property="modelType" />
+    <result column="model_sub_type" jdbcType="INTEGER" property="modelSubType" />
+    <result column="file_sort" jdbcType="INTEGER" property="fileSort" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+    <result column="ext_json" jdbcType="VARCHAR" property="extJson" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, file_url, model_url, model_type, model_sub_type, file_sort, is_valid, ext_json, 
+    create_time, update_time
+  </sql>
+  <sql id="findWhere">
+    <where>
+      <if test="fileUrl != null">
+        and file_url = #{fileUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="modelUrl != null">
+        and model_url = #{modelUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="modelType != null">
+        and model_type = #{modelType,jdbcType=INTEGER}
+      </if>
+      <if test="modelSubType != null">
+        and model_sub_type = #{modelSubType,jdbcType=INTEGER}
+      </if>
+      <if test="fileSort != null">
+        and file_sort = #{fileSort,jdbcType=INTEGER}
+      </if>
+      <if test="isValid != null">
+        and is_valid = #{isValid,jdbcType=INTEGER}
+      </if>
+      <if test="extJson != null">
+        and ext_json = #{extJson,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from model_attach_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from model_attach_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.pojo.ModelAttachInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into model_attach_info (file_url, model_url, model_type, 
+      model_sub_type, file_sort, is_valid, 
+      ext_json, create_time, update_time
+      )
+    values (#{fileUrl,jdbcType=VARCHAR}, #{modelUrl,jdbcType=VARCHAR}, #{modelType,jdbcType=INTEGER}, 
+      #{modelSubType,jdbcType=INTEGER}, #{fileSort,jdbcType=INTEGER}, #{isValid,jdbcType=INTEGER}, 
+      #{extJson,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.pojo.ModelAttachInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into model_attach_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+      <if test="modelUrl != null">
+        model_url,
+      </if>
+      <if test="modelType != null">
+        model_type,
+      </if>
+      <if test="modelSubType != null">
+        model_sub_type,
+      </if>
+      <if test="fileSort != null">
+        file_sort,
+      </if>
+      <if test="isValid != null">
+        is_valid,
+      </if>
+      <if test="extJson != null">
+        ext_json,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelUrl != null">
+        #{modelUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelType != null">
+        #{modelType,jdbcType=INTEGER},
+      </if>
+      <if test="modelSubType != null">
+        #{modelSubType,jdbcType=INTEGER},
+      </if>
+      <if test="fileSort != null">
+        #{fileSort,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null">
+        #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="extJson != null">
+        #{extJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.pojo.ModelAttachInfo">
+    update model_attach_info
+    <set>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelUrl != null">
+        model_url = #{modelUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelType != null">
+        model_type = #{modelType,jdbcType=INTEGER},
+      </if>
+      <if test="modelSubType != null">
+        model_sub_type = #{modelSubType,jdbcType=INTEGER},
+      </if>
+      <if test="fileSort != null">
+        file_sort = #{fileSort,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null">
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="extJson != null">
+        ext_json = #{extJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.pojo.ModelAttachInfo">
+    update model_attach_info
+    set file_url = #{fileUrl,jdbcType=VARCHAR},
+      model_url = #{modelUrl,jdbcType=VARCHAR},
+      model_type = #{modelType,jdbcType=INTEGER},
+      model_sub_type = #{modelSubType,jdbcType=INTEGER},
+      file_sort = #{fileSort,jdbcType=INTEGER},
+      is_valid = #{isValid,jdbcType=INTEGER},
+      ext_json = #{extJson,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBath"   parameterType="java.util.List">
+    INSERT INTO model_attach_info(
+    file_url,model_url,model_type,
+    model_sub_type, file_sort, is_valid,
+    ext_json, create_time, update_time) values
+    <foreach collection="list" item="item" separator="," >
+      (
+      #{item.fileUrl,jdbcType=VARCHAR},
+      #{item.modelUrl,jdbcType=VARCHAR},
+      #{item.modelType,jdbcType=INTEGER},
+      #{item.modelSubType,jdbcType=INTEGER},
+      #{item.fileSort,jdbcType=INTEGER},
+      #{item.isValid,jdbcType=INTEGER},
+      #{item.extJson,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP},
+      #{item.updateTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+  <select id="select" parameterType="com.example.pojo.ModelAttachInfo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from model_attach_info <include refid="findWhere"/>
+    order by file_sort asc
+  </select>
+</mapper>

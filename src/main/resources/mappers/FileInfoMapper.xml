@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.FileInfoMapper">
+  <resultMap id="BaseResultMap" type="com.example.pojo.FileInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="file_type" jdbcType="INTEGER" property="fileType" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_original_name" jdbcType="VARCHAR" property="fileOriginalName" />
+    <result column="file_size" jdbcType="VARCHAR" property="fileSize" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="file_upload_status" jdbcType="INTEGER" property="fileUploadStatus" />
+    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="file_server" jdbcType="VARCHAR" property="fileServer" />
+    <result column="file_suffix" jdbcType="VARCHAR" property="fileSuffix" />
+    <result column="file_md5" jdbcType="VARCHAR" property="fileMd5" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+    <result column="ext_json" jdbcType="VARCHAR" property="extJson" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, file_type, file_name, file_original_name, file_size, file_url, file_upload_status, 
+    file_path, file_server, file_suffix, file_md5, is_valid,
+    ext_json, create_time, update_time
+  </sql>
+  <sql id="findWhere">
+    <where>
+      <if test="fileType != null">
+        and #{fileType}=file_type
+      </if>
+      <if test="fileName != null">
+        and #{fileName}=file_name
+      </if>
+      <if test="fileOriginalName != null">
+        and #{fileOriginalName}=file_original_name
+      </if>
+      <if test="fileSize != null">
+        and #{fileSize}=file_size
+      </if>
+      <if test="fileUrl != null">
+        and #{fileUrl}=file_url
+      </if>
+      <if test="fileUploadStatus != null">
+        and #{fileUploadStatus}=file_upload_status
+      </if>
+      <if test="filePath != null">
+        and  #{filePath}=file_path
+      </if>
+      <if test="fileServer != null">
+        and  #{fileServer}=file_server
+      </if>
+      <if test="fileSuffix != null">
+        and  #{fileSuffix}=file_suffix
+      </if>
+      <if test="fileMd5 != null">
+        and  #{fileMd5}=file_md5
+      </if>
+      <if test="isValid != null">
+        and  #{isValid}=is_valid
+      </if>
+      <if test="extJson != null">
+        and  #{extJson}=ext_json
+      </if>
+      <if test="createTime != null">
+        and  #{createTime}=create_time
+      </if>
+      <if test="updateTime != null">
+        and  #{updateTime}=update_time,
+      </if>
+    </where>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from file_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByFileInfo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from file_info <include refid="findWhere"/>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from file_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.pojo.FileInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into file_info (file_type, file_name, file_original_name, 
+      file_size, file_url, file_upload_status, 
+      file_path,
+      file_server, file_suffix, file_md5, 
+      is_valid, ext_json, create_time, 
+      update_time)
+    values (#{fileType,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{fileOriginalName,jdbcType=VARCHAR}, 
+      #{fileSize,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{fileUploadStatus,jdbcType=INTEGER}, 
+      #{filePath,jdbcType=VARCHAR},
+      #{fileServer,jdbcType=VARCHAR}, #{fileSuffix,jdbcType=VARCHAR}, #{fileMd5,jdbcType=VARCHAR}, 
+      #{isValid,jdbcType=INTEGER}, #{extJson,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.pojo.FileInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into file_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileType != null">
+        file_type,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="fileOriginalName != null">
+        file_original_name,
+      </if>
+      <if test="fileSize != null">
+        file_size,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+      <if test="fileUploadStatus != null">
+        file_upload_status,
+      </if>
+      <if test="filePath != null">
+        file_path,
+      </if>
+      <if test="fileServer != null">
+        file_server,
+      </if>
+      <if test="fileSuffix != null">
+        file_suffix,
+      </if>
+      <if test="fileMd5 != null">
+        file_md5,
+      </if>
+      <if test="isValid != null">
+        is_valid,
+      </if>
+      <if test="extJson != null">
+        ext_json,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileType != null">
+        #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileOriginalName != null">
+        #{fileOriginalName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        #{fileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUploadStatus != null">
+        #{fileUploadStatus,jdbcType=INTEGER},
+      </if>
+      <if test="filePath != null">
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="fileServer != null">
+        #{fileServer,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSuffix != null">
+        #{fileSuffix,jdbcType=VARCHAR},
+      </if>
+      <if test="fileMd5 != null">
+        #{fileMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="extJson != null">
+        #{extJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.pojo.FileInfo">
+    update file_info
+    <set>
+      <if test="fileType != null">
+        file_type = #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileOriginalName != null">
+        file_original_name = #{fileOriginalName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        file_size = #{fileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUploadStatus != null">
+        file_upload_status = #{fileUploadStatus,jdbcType=INTEGER},
+      </if>
+      <if test="filePath != null">
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="fileServer != null">
+        file_server = #{fileServer,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSuffix != null">
+        file_suffix = #{fileSuffix,jdbcType=VARCHAR},
+      </if>
+      <if test="fileMd5 != null">
+        file_md5 = #{fileMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="extJson != null">
+        ext_json = #{extJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.pojo.FileInfo">
+    update file_info
+    set file_type = #{fileType,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_original_name = #{fileOriginalName,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      file_upload_status = #{fileUploadStatus,jdbcType=INTEGER},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      file_server = #{fileServer,jdbcType=VARCHAR},
+      file_suffix = #{fileSuffix,jdbcType=VARCHAR},
+      file_md5 = #{fileMd5,jdbcType=VARCHAR},
+      is_valid = #{isValid,jdbcType=INTEGER},
+      ext_json = #{extJson,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBath"   parameterType="java.util.List">
+    INSERT INTO file_info (file_type, file_name, file_original_name,
+    file_size, file_url, file_upload_status,
+    file_path,
+    file_server, file_suffix, file_md5,
+    is_valid, ext_json, create_time,
+    update_time) values
+    <foreach collection="list" item="item" separator="," >
+                                     (
+      #{item.fileType,jdbcType=INTEGER},
+      #{item.fileName,jdbcType=VARCHAR},
+      #{item.fileOriginalName,jdbcType=VARCHAR},
+      #{item.fileSize,jdbcType=VARCHAR},
+      #{item.fileUrl,jdbcType=VARCHAR},
+      #{item.fileUploadStatus,jdbcType=INTEGER},
+      #{item.filePath,jdbcType=VARCHAR},
+      #{item.fileServer,jdbcType=VARCHAR},
+      #{item.fileSuffix,jdbcType=VARCHAR},
+      #{item.fileMd5,jdbcType=VARCHAR},
+      #{item.isValid,jdbcType=INTEGER},
+      #{item.extJson,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP},
+      #{item.updateTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+  <select id="select" parameterType="com.example.pojo.FileInfo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from file_info
+    <include refid="findWhere"/>
+  </select>
+</mapper>

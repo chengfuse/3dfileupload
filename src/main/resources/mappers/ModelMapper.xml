@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ModelMapper">
+  <resultMap id="BaseResultMap" type="com.example.pojo.Model">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="model_url" jdbcType="VARCHAR" property="modelUrl" />
+    <result column="model_name" jdbcType="VARCHAR" property="modelName" />
+    <result column="model_suffix" jdbcType="VARCHAR" property="modelSuffix" />
+    <result column="model_md5" jdbcType="VARCHAR" property="modelMd5" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+    <result column="ext_json" jdbcType="VARCHAR" property="extJson" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, model_url, model_name, model_suffix, model_md5, is_valid, ext_json, create_time, 
+    update_time
+  </sql>
+  <sql id="findWhere">
+    <where>
+      <if test="modelUrl != null">
+        and model_url=#{modelUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="modelName != null">
+        and model_name=#{modelName,jdbcType=VARCHAR}
+      </if>
+      <if test="modelSuffix != null">
+        and model_suffix=#{modelSuffix,jdbcType=VARCHAR}
+      </if>
+      <if test="modelMd5 != null">
+        and model_md5=#{modelMd5,jdbcType=VARCHAR}
+      </if>
+      <if test="isValid != null">
+        and is_valid=#{isValid,jdbcType=INTEGER}
+      </if>
+      <if test="extJson != null">
+        and ext_json=#{extJson,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        and create_time=#{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and update_time=#{updateTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from model
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from model
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.pojo.Model">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into model (model_url, model_name, model_suffix, 
+      model_md5, is_valid, ext_json, 
+      create_time, update_time)
+    values (#{modelUrl,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, #{modelSuffix,jdbcType=VARCHAR}, 
+      #{modelMd5,jdbcType=VARCHAR}, #{isValid,jdbcType=INTEGER}, #{extJson,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.pojo.Model">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into model
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="modelUrl != null">
+        model_url,
+      </if>
+      <if test="modelName != null">
+        model_name,
+      </if>
+      <if test="modelSuffix != null">
+        model_suffix,
+      </if>
+      <if test="modelMd5 != null">
+        model_md5,
+      </if>
+      <if test="isValid != null">
+        is_valid,
+      </if>
+      <if test="extJson != null">
+        ext_json,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="modelUrl != null">
+        #{modelUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelName != null">
+        #{modelName,jdbcType=VARCHAR},
+      </if>
+      <if test="modelSuffix != null">
+        #{modelSuffix,jdbcType=VARCHAR},
+      </if>
+      <if test="modelMd5 != null">
+        #{modelMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="extJson != null">
+        #{extJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.pojo.Model">
+    update model
+    <set>
+      <if test="modelUrl != null">
+        model_url = #{modelUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelName != null">
+        model_name = #{modelName,jdbcType=VARCHAR},
+      </if>
+      <if test="modelSuffix != null">
+        model_suffix = #{modelSuffix,jdbcType=VARCHAR},
+      </if>
+      <if test="modelMd5 != null">
+        model_md5 = #{modelMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="extJson != null">
+        ext_json = #{extJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.pojo.Model">
+    update model
+    set model_url = #{modelUrl,jdbcType=VARCHAR},
+      model_name = #{modelName,jdbcType=VARCHAR},
+      model_suffix = #{modelSuffix,jdbcType=VARCHAR},
+      model_md5 = #{modelMd5,jdbcType=VARCHAR},
+      is_valid = #{isValid,jdbcType=INTEGER},
+      ext_json = #{extJson,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select" parameterType="com.example.pojo.Model" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from model<include refid="findWhere"/>
+  </select>
+</mapper>
