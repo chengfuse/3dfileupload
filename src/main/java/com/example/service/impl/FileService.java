@@ -55,6 +55,13 @@ public class FileService implements IFileService {
     public ApiClient upload(HttpServletRequest request, FileInfoVo fileInfo) {
         ApiClient apiClient=null;
         BufferedOutputStream os=null;
+        if(fileInfo.getFmd5()==null){
+            return apiClient=ApiClient.builder().bizCode(ReturnCode.EXECUTION_FAILED.getCode()).bizMsg("md5缺失！").build();
+        }
+        if (fileInfo.getChunk() == null) {
+            fileInfo.setChunk(0);
+            fileInfo.setChunks(1);
+        }
         File file=new File(filePath+fileInfo.getFmd5()+"/"+fileInfo.getChunk()); //创建分片文件
         logger.info("创建文件分片："+fileInfo.getFile().getOriginalFilename());
         try {
@@ -72,10 +79,21 @@ public class FileService implements IFileService {
                 int  percentage=0; //进度
                 long writeSize=0;
                 logger.info("合并文件");
+                boolean flag=false;
                 for (int i = 0; i < fileInfo.getChunks(); i++) {
                     File newFile=new File(filePath+fileInfo.getFmd5()+"/"+i); //浏览一个文件分片
-                    while (!file.exists()) //查询文件分片是否完整
-                        Thread.sleep(100);
+                    while (!newFile.exists()){ //查询文件分片是否完整
+                        int flog=1;
+                        Thread.sleep(1000);
+                        flog++;
+                        if (flog==10) {
+                            flag=true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                       return apiClient=ApiClient.builder().bizCode(ReturnCode.EXECUTION_FAILED.getCode()).bizMsg("分片缺失！").build();
+                    }
                     byte[] bytes= FileUtils.readFileToByteArray(newFile); //合并文件
                     newFile.delete();
                     os.write(bytes); //写入
@@ -249,7 +267,7 @@ public class FileService implements IFileService {
             Integer integer=4;
             if (suffix.equals("png")||suffix.equals("jpg")) {
                 integer=1;
-            }else if (suffix.equals("gltf")||suffix.equals("glb")) {
+            }else if(suffix.equals("gltf")||suffix.equals("glb")) {
                 integer=2;
             }else if(suffix.equals("mp4")){
                 integer=3;
