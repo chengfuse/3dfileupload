@@ -98,7 +98,7 @@ public  class ZipUtils {
                     if (!newFile.getParentFile().exists()) {
                         newFile.getParentFile().mkdirs();
                     }
-//                    fileInfos.get(count).getId(randomStr);
+                    fileInfos.get(count).setFileUrl(randomStr);
                     outputStream=new  FileOutputStream(newFile);
                     byte b[]=new  byte[1024];
                     int  len=0;
